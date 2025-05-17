@@ -8,6 +8,8 @@ import {
   Typography,
   CircularProgress,
   Grid,
+  useMediaQuery,
+  useTheme
 } from "@mui/material";
 
 const App = () => {
@@ -15,8 +17,11 @@ const App = () => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const theme = useTheme(); // ✅ now theme is defined
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const HUGGINGFACE_API = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn";
-  const API_KEY = process.env.REACT_APP_HUGGINGFACE_API_KEY;
+  const API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY; // ✅ for Vite projects
 
   const generateCards = async () => {
     setLoading(true);
@@ -53,13 +58,14 @@ const App = () => {
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Typography
-        variant="h4"
+        variant="h2"
         component="h1"
         gutterBottom
         sx={{
           fontWeight: 700,
           textAlign: "center",
           color: "primary.main",
+          fontSize: isMobile ? "2rem" : "2.5rem"
         }}
       >
         🧠 AI Flashcard Generator
@@ -123,4 +129,3 @@ const App = () => {
 };
 
 export default App;
-              
