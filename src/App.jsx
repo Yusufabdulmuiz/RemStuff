@@ -7,7 +7,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const HUGGINGFACE_API = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn";
-  const API_KEY = "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"; // ✅ Your API token
+  const API_KEY = "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"; // 
 
   const generateCards = async () => {
     setLoading(true);
