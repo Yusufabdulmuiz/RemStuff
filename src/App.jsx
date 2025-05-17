@@ -1,27 +1,12 @@
 import React, { useState } from "react";
-import {
-  Container,
-  TextField,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  CircularProgress,
-  Grid,
-  useMediaQuery,
-  useTheme
-} from "@mui/material";
 
 const App = () => {
   const [topic, setTopic] = useState("");
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const theme = useTheme(); // ✅ now theme is defined
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
   const HUGGINGFACE_API = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn";
-  const API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY; // ✅ for Vite projects
+  const API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 
   const generateCards = async () => {
     setLoading(true);
@@ -56,76 +41,54 @@ const App = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography
-        variant="h2"
-        component="h1"
-        gutterBottom
-        sx={{
-          fontWeight: 700,
-          textAlign: "center",
-          color: "primary.main",
-          fontSize: isMobile ? "2rem" : "2.5rem"
-        }}
-      >
-        🧠 AI Flashcard Generator
-      </Typography>
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem" }}>
+      <h1 style={{ textAlign: "center", color: "#333" }}>🧠 AI Flashcard Generator</h1>
 
-      <Grid container spacing={2} justifyContent="center">
-        <Grid item xs={12} md={8}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            label="Enter a topic"
-            placeholder="e.g. Photosynthesis"
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            sx={{ mb: 2 }}
-            onKeyPress={(e) => e.key === "Enter" && generateCards()}
-          />
-        </Grid>
+      <div style={{ marginTop: "1rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <input
+          type="text"
+          value={topic}
+          onChange={(e) => setTopic(e.target.value)}
+          placeholder="Enter a topic (e.g. Photosynthesis)"
+          style={{ padding: "0.75rem", fontSize: "1rem", width: "100%" }}
+          onKeyDown={(e) => e.key === "Enter" && generateCards()}
+        />
 
-        <Grid item xs={12} md={4}>
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={generateCards}
-            disabled={loading}
-            sx={{ height: "56px" }}
+        <button
+          onClick={generateCards}
+          disabled={loading}
+          style={{
+            padding: "0.75rem",
+            fontSize: "1rem",
+            backgroundColor: "#007bff",
+            color: "white",
+            border: "none",
+            cursor: "pointer"
+          }}
+        >
+          {loading ? "Generating..." : "Generate Flashcards"}
+        </button>
+      </div>
+
+      <div style={{ marginTop: "2rem", display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))" }}>
+        {cards.map((card, index) => (
+          <div
+            key={index}
+            style={{
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              padding: "1rem",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+            }}
           >
-            {loading ? (
-              <CircularProgress size={24} sx={{ color: "white" }} />
-            ) : (
-              "Generate Flashcards"
-            )}
-          </Button>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={2} sx={{ mt: 2 }}>
-        {cards.map((card, i) => (
-          <Grid item xs={12} sm={6} md={4} key={i}>
-            <Card
-              sx={{
-                height: "100%",
-                transition: "transform 0.2s",
-                "&:hover": { transform: "scale(1.02)" }
-              }}
-            >
-              <CardContent>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Flashcard {i + 1}
-                </Typography>
-                <Typography variant="body1" sx={{ mt: 1 }}>
-                  {card}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+            <h4 style={{ margin: "0 0 0.5rem" }}>Flashcard {index + 1}</h4>
+            <p>{card}</p>
+          </div>
         ))}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   );
 };
 
 export default App;
+        
