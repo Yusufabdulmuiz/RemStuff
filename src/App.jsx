@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
+const HUGGINGFACE_API = "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B";
+const API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY;
+
 const App = () => {
   const [topic, setTopic] = useState("");
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const const HUGGINGFACE_API = "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B";
-  const API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 
   const generateCards = async () => {
     setLoading(true);
@@ -17,11 +17,11 @@ const App = () => {
         method: "POST",
         headers: {
           Authorization: `Bearer ${API_KEY}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          inputs: `Explain the topic: ${topic}`
-        })
+          inputs: `Explain the topic: ${topic}`,
+        }),
       });
 
       const data = await response.json();
@@ -63,14 +63,21 @@ const App = () => {
             backgroundColor: "#007bff",
             color: "white",
             border: "none",
-            cursor: "pointer"
+            cursor: "pointer",
           }}
         >
           {loading ? "Generating..." : "Generate Flashcards"}
         </button>
       </div>
 
-      <div style={{ marginTop: "2rem", display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))" }}>
+      <div
+        style={{
+          marginTop: "2rem",
+          display: "grid",
+          gap: "1rem",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+        }}
+      >
         {cards.map((card, index) => (
           <div
             key={index}
@@ -78,7 +85,7 @@ const App = () => {
               border: "1px solid #ccc",
               borderRadius: "8px",
               padding: "1rem",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
             }}
           >
             <h4 style={{ margin: "0 0 0.5rem" }}>Flashcard {index + 1}</h4>
@@ -91,4 +98,3 @@ const App = () => {
 };
 
 export default App;
-        
