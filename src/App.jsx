@@ -19,7 +19,8 @@ const App = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const HUGGINGFACE_API = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn";
-  const API_KEY = "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";
+  const API_KEY = process.env.REACT_APP_HUGGINGFACE_API_KEY;
+  
 
   const generateCards = async () => {
     setLoading(true);
