@@ -1,6 +1,6 @@
 # React + Vite
 
-# RemStuff
+# RemStuff (FlashCard Ai) by Dev. Abū Ridwān 
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
