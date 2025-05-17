@@ -6,7 +6,6 @@ const App = () => {
   const [loading, setLoading] = useState(false);
 
   const const HUGGINGFACE_API = "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B";
-  
   const API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 
   const generateCards = async () => {
