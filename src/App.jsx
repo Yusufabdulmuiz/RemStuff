@@ -10,7 +10,6 @@ import {
   Grid,
   useMediaQuery
 } from "@mui/material";
-import { theme } from "@mui/system";
 
 const App = () => {
   const [topic, setTopic] = useState("");
