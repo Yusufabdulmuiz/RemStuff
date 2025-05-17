@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { 
+import {
   Container,
   TextField,
   Button,
@@ -8,18 +8,15 @@ import {
   Typography,
   CircularProgress,
   Grid,
-  useMediaQuery
 } from "@mui/material";
 
 const App = () => {
   const [topic, setTopic] = useState("");
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(false);
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const HUGGINGFACE_API = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn";
   const API_KEY = process.env.REACT_APP_HUGGINGFACE_API_KEY;
-  
 
   const generateCards = async () => {
     setLoading(true);
@@ -54,17 +51,15 @@ const App = () => {
   };
 
   return (
-    <div>helloo</div>
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography 
-        variant="h2" 
-        component="h1" 
-        gutterBottom 
-        sx={{ 
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        sx={{
           fontWeight: 700,
           textAlign: "center",
           color: "primary.main",
-          fontSize: isMobile ? "2rem" : "2.5rem"
         }}
       >
         🧠 AI Flashcard Generator
@@ -104,8 +99,8 @@ const App = () => {
       <Grid container spacing={2} sx={{ mt: 2 }}>
         {cards.map((card, i) => (
           <Grid item xs={12} sm={6} md={4} key={i}>
-            <Card 
-              sx={{ 
+            <Card
+              sx={{
                 height: "100%",
                 transition: "transform 0.2s",
                 "&:hover": { transform: "scale(1.02)" }
@@ -128,3 +123,4 @@ const App = () => {
 };
 
 export default App;
+              
