@@ -1,63 +1,72 @@
 import React, { useState } from "react";
+import "./App.css";
 
-const App = () => {
-  const [count, setCount] = useState(0);
-  const limit = 10;
+function App() {
+  const [topic, setTopic] = useState("");
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const increment = () => {
-    if (count < limit) setCount(count + 1);
-  };
+  const HUGGINGFACE_API = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn";
+  const API_KEY = "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"; // ✅ Your API token
 
-  const decrement = () => {
-    if (count > 0) setCount(count - 1);
+  const generateCards = async () => {
+    setLoading(true);
+    setCards([]);
+
+    const response = await fetch(HUGGINGFACE_API, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        inputs: `Explain the topic: ${topic}`
+      })
+    });
+
+    const data = await response.json();
+    if (data.error) {
+      alert("API Error: " + data.error);
+      setLoading(false);
+      return;
+    }
+
+    const summary = data[0]?.summary_text || "";
+    const splitPoints = summary.split(/\. |\n/g).filter(Boolean);
+
+    setCards(splitPoints);
+    setLoading(false);
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.heading}>Click Counter</h1>
-      <p style={styles.count}>Count: {count}</p>
-      <div style={styles.buttonContainer}>
-        <button style={styles.button} onClick={increment}>
-          Increase
-        </button>
-        <button style={styles.button} onClick={decrement}>
-          Decrease
-        </button>
+    <div className="App" style={{ maxWidth: 600, margin: "auto", padding: 20 }}>
+      <h1>🧠 AI Flashcard Generator</h1>
+      <input
+        type="text"
+        placeholder="Enter a topic (e.g. photosynthesis)"
+        value={topic}
+        onChange={(e) => setTopic(e.target.value)}
+        style={{ width: "100%", padding: 10 }}
+      />
+      <button onClick={generateCards} disabled={loading} style={{ marginTop: 10 }}>
+        {loading ? "Generating..." : "Generate Flashcards"}
+      </button>
+
+      <div style={{ marginTop: 20 }}>
+        {cards.map((card, i) => (
+          <div key={i} style={{
+            border: "1px solid #ccc",
+            padding: 15,
+            marginBottom: 10,
+            borderRadius: 10
+          }}>
+            <strong>Flashcard {i + 1}</strong><br />
+            {card}
+          </div>
+        ))}
       </div>
-      {count === limit && <p style={styles.limitText}>You've reached the limit!</p>}
     </div>
   );
-};
-
-// Simple inline styling
-const styles = {
-  container: {
-    textAlign: "center",
-    marginTop: "50px",
-    fontFamily: "Arial, sans-serif"
-  },
-  heading: {
-    fontSize: "2rem"
-  },
-  count: {
-    fontSize: "1.5rem",
-    margin: "20px 0"
-  },
-  buttonContainer: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "10px"
-  },
-  button: {
-    padding: "10px 20px",
-    fontSize: "1rem",
-    cursor: "pointer"
-  },
-  limitText: {
-    color: "red",
-    marginTop: "20px"
-  }
-};
+}
 
 export default App;
-     
